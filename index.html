@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+  <title>Simulated At-bat app</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  <link
+    rel="stylesheet"
+    href="https://www.w3schools.com/lib/w3-theme-black.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+  />
+  <style>
+    .header {
+      background-color: black;
+      text-align: center;
+      color: white;
+      padding: 10px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .leftColumn {
+      flex: 1;
+    }
+
+    .middleColumn {
+      flex: 6;
+    }
+
+    .rightColumn {
+      flex: 1;
+    }
+
+    .topPanel {
+      display: flex;
+      padding: 10px;
+    }
+
+    .title {
+      font-size: 12px;
+      align-items: center;
+      font-style: italic;
+      flex: 2;
+    }
+
+    .buttonHolder {
+      align-items: center;
+      flex: 1;
+    }
+
+    /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%;
+      }
+    }
+
+    /* everything below is just for the log in form */
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .imgcontainer {
+      text-align: center;
+      margin: 24px 0 12px 0;
+    }
+
+    img.avatar {
+      width: 40%;
+      border-radius: 50%;
+    }
+    .loginContainer {
+      padding: 16px;
+    }
+
+    span.psw {
+      float: right;
+      padding-top: 16px;
+    }
+
+    /* everything above is just for the log in form */
+  </style>
+
+  <body onload="login()">
+    <!-- Header -->
+    <div class="header">Simulated At-bat app</div>
+
+    <div class="topPanel">
+      <div class="title" id="title"></div>
+      <div class="buttonHolder" id="buttonHolder"></div>
+    </div>
+
+    <div class="container">
+      <div class="leftColumn"></div>
+      <div class="middleColumn" id="main"></div>
+      <div class="rightColumn"></div>
+    </div>
+
+    <script>
+      var headCount = 1;
+      var handedness = "";
+      var miniVideoToPlay = "";
+      var answerTracker = 1;
+      var pitcher = "";
+
+      function login() {
+        var s = "";
+        s += "<form action='' method='post'>";
+        s += "<div class='loginContainer'>";
+        s += "<label for='uname'><b>Username</b></label><br>";
+        s +=
+          "<input type='text' placeholder='Enter Username' name='uname' required>";
+        s += "<label for='psw'><b>Password</b></label><br>";
+        s +=
+          "<input type='password' placeholder='Enter Password' name='psw' required><br> ";
+        s += "<div class='w3-quarter w3-large'>";
+        s +=
+          "<button class='w3-btn w3-teal' onclick= 'language()'>Login</button>";
+        s += "</div>";
+        document.getElementById("title").innerHTML = "Please log in";
+        document.getElementById("main").innerHTML = s;
+      }
+
+      function language() {
+        var q = "";
+
+        q += "ENGLISH <br>";
+        q += "<img src = 'USA.png' onclick ='home()'><br><br>";
+        q += "SPANISH / ESPAÑOL  <br>";
+        q += "<img src = 'SPAIN.png'><br><br>";
+        q += "JAPANESE / 日本人 <br>";
+        q += "<img src = 'JAPAN.png'><br><br>";
+        q += "KOREAN / 한국어 <br>";
+        q += "<img src = 'KOREA.png'>";
+
+        document.getElementById("title").innerHTML = "Choose the language";
+        document.getElementById("main").innerHTML = q;
+      }
+
+      function home() {
+        document.getElementById("title").innerHTML = "";
+        document.getElementById("buttonHolder").innerHTML = "";
+
+        var w = "<div class='w3-row-padding w3-left w3-margin-top'>";
+        w += "<div class='w3-third-left'>";
+        w += "<div class='w3-card-3 w3-container' style='min-height:460px'>";
+        w +=
+          "<p><b>The information in this app is based on live at-bats, and will help you better prepare for the pitcher and anticipate his next pitch</b></p>";
+        w += "<p>The layout is as follows:</p>";
+        w +=
+          "<ol><li>You will see the pitcher sheet. This will have the pitcher's scouting report and tendencies.</li>";
+        w +=
+          "<li>You will see a video of a pitch. Then the result and pitch count will be presented.</li>";
+        w +=
+          "<li>You will then be asked what pitch you are expecting/sitting-on. Once answered, the next pitch in the at-bat will then be shown, with the type of pitch outlined to compare to your answer.</li></ol>";
+        w += "<p>The answer to all questions will be provided at the end.</p>";
+        w += "<p>Good Luck!</p>";
+        w += "<div class ='w3-center'>";
+        w += "<p><b>Choose your handedness below to start:</b></p>";
+        w +=
+          "<p><button class='w3-btn w3-teal w3-large' onclick= 'goToLHHPitcher()'>Left Handed</button>&nbsp;";
+        w +=
+          "<button class='w3-btn w3-teal w3-large' onclick= 'goToRHHPitcher()'>Right Handed</button></p>";
+        w += "</div>";
+        w += "</div>";
+        w += "</div>";
+
+        document.getElementById("main").innerHTML = w;
+        return false;
+      }
+
+      function goToLHHPitcher() {
+        //display the LHH pitcher sheet with a button to display LHH videos
+        var a = "";
+        var b = "";
+        pitcher = "L"; // it is a LHH Pitcher video to play
+        a = "<div class='w3-quarter w3-large'>";
+        a +=
+          "<button class='w3-btn w3-teal' id= 'toSubmit' onclick= 'startMainVideo()'>Start At-bat</button>";
+        a += "</div>";
+        b =
+          "<embed src='PSLHH.pdf#toolbar=0' type='application/pdf' width='100%' height='900px'/>";
+        document.getElementById("title").innerHTML =
+          "Study the pitcher sheet. If necessary, Zoom in.  When ready tap <b>Start At-bat</b>";
+        document.getElementById("buttonHolder").innerHTML = a;
+        document.getElementById("main").innerHTML = b;
+      }
+
+      function goToRHHPitcher() {
+        //display the LHH pitcher sheet with a button to display LHH videos
+        var a = "";
+        var b = "";
+        pitcher = "R"; // it is a RHH Pitcher video to play
+        a = "<div class='w3-quarter w3-large'>";
+        a +=
+          "<button class='w3-btn w3-teal' id= 'toSubmit' onclick= 'startMainVideo()'>Start At-bat</button>";
+        a += "</div>";
+        b =
+          "<embed src='PSRHH.pdf#toolbar=0' type='application/pdf' width='100%' height='900px'/>";
+        document.getElementById("title").innerHTML =
+          "Study the pitcher sheet. If necessary, Zoom in. When ready tap <b>Start At-bat</b>";
+        document.getElementById("buttonHolder").innerHTML = a;
+        document.getElementById("main").innerHTML = b;
+      }
+
+      function startMainVideo() {
+        //display the videos 1,2 and 3 based on value in headCount variable. Starting value is 1
+        var b = "";
+
+        switch (headCount) {
+          case 1:
+            if (pitcher == "L") {
+              b =
+                "<video width=100%' controls id='myvideo' autoplay onended ='startQuiz()'><source src='LHH1.mp4' type='video/mp4'></video>";
+              miniVideoToPlay = "L1";
+            } else if (pitcher == "R") {
+              b =
+                "<video width=100%' controls id='myvideo' autoplay onended ='startQuiz()'><source src='RHH1.mp4' type='video/mp4'></video>";
+              miniVideoToPlay = "R1";
+            }
+            break;
+          case 2:
+            if (pitcher == "L") {
+              b =
+                "<video width=100%' controls id='myvideo' autoplay onended ='startQuiz()'><source src='LHH2.mp4' type='video/mp4'></video>";
+              miniVideoToPlay = "L2";
+            } else if (pitcher == "R") {
+              b =
+                "<video width=100%' controls id='myvideo' autoplay onended ='startQuiz()'><source src='RHH2.mp4' type='video/mp4'></video>";
+              miniVideoToPlay = "R2";
+            }
+            break;
+          case 3:
+            if (pitcher == "L") {
+              b =
+                "<video width=100%' controls id='myvideo' autoplay onended ='startQuiz()'><source src='LHH3.mp4' type='video/mp4'></video>";
+              miniVideoToPlay = "L3";
+            } else if (pitcher == "R") {
+              b =
+                "<video width=100%' controls id='myvideo' autoplay onended ='startQuiz()'><source src='RHH3.mp4' type='video/mp4'></video>";
+              miniVideoToPlay = "R3";
+            }
+            break;
+        }
+
+        // display the heading and the related video
+        document.getElementById("title").innerHTML =
+          "Bat at " + headCount + "<br> Watch the video";
+        document.getElementById("buttonHolder").innerHTML = "";
+        document.getElementById("main").innerHTML = b;
+        return false;
+      }
+
+      function startQuiz() {
+        //display the same quiz always. Button submit calls the mini videos 1a, 2a and 3a
+        var x = "";
+        var y = "";
+        x = "<div class ='content'>";
+        x += "<div class='w3-row-padding'>";
+        x += "<div>";
+        x = "<form>";
+        x += "<div>";
+        x +=
+          "<p style='font-size: 20px;'><b> What type of pitch are you sitting on for the next pitch?</b></p>";
+        x += "</div>";
+        x += "<div class='w3-row'>";
+        x += "<div class='w3-half'>";
+        x +=
+          "<input id='Q1Radio' class='w3-radio' type='radio' name='Q1' value='Fastball'>";
+        x += "<label> Fastball</label>";
+        x += "<br>";
+        x +=
+          "<input id='Q1Radio' class='w3-radio' type='radio' name='Q1' value='Curveball'>";
+        x += "<label> Curveball</label>";
+        x += "<br>";
+        x +=
+          "<input id='Q1Radio' class='w3-radio' type='radio' name='Q1' value='Changeup'>";
+        x += "<label> Changeup</label>";
+        x += "<br>";
+        x +=
+          "<input id='Q1Radio' class='w3-radio' type='radio' name='Q1' value='Slider'>";
+        x += "<label> Slider</label>";
+        x += "</div>";
+        x += "</div>";
+        x += "</form>";
+        x += "</div>";
+        x += "</div>";
+        x += "</div>";
+
+        y = "<div class='w3-quarter w3-large'>";
+        y +=
+          "<button class='w3-btn w3-teal' id= 'toSubmit' onclick= 'submit()'>Show next pitch</button>";
+        y += "</div>";
+
+        document.getElementById("main").innerHTML = x;
+        document.getElementById("buttonHolder").innerHTML = y;
+        document.getElementById("title").innerHTML =
+          "Bat at " +
+          headCount +
+          "<br>Answer the question below. Then tap <b>Show next pitch</b>";
+
+        return false;
+      }
+
+      function submit() {
+        //keeps track of answer submitted. Need 3 separate answers to record
+        var radios = document.forms[0];
+
+        for (var i = 0, length = radios.length; i < length; i++) {
+          if (radios[i].checked) {
+            //save the answer to display later
+            if (answerTracker == 1) {
+              localStorage.setItem("answer1", radios[i].value);
+              answerTracker++;
+            } else if (answerTracker == 2) {
+              localStorage.setItem("answer2", radios[i].value);
+              answerTracker++;
+            } else {
+              localStorage.setItem("answer3", radios[i].value);
+              answerTracker = 1;
+            }
+          }
+        }
+        miniVideos();
+      }
+
+      function miniVideos() {
+        //Display the videos 1a or 2a or 3a
+
+        var v = "";
+        var t = "";
+
+        switch (miniVideoToPlay) {
+          case "L1":
+            v =
+              "<video width=100%' controls id='myvideo' autoplay ><source src='LHH1A.mp4' type='video/mp4'></video>";
+            break;
+
+          case "L2":
+            v =
+              "<video width=100%' controls id='myvideo' autoplay ><source src='LHH2A.mp4' type='video/mp4'></video>";
+            break;
+
+          case "L3":
+            v =
+              "<video width=100%' controls id='myvideo' autoplay ><source src='LHH3A.mp4' type='video/mp4'></video>";
+            break;
+
+          case "R1":
+            v =
+              "<video width=100%' controls id='myvideo' autoplay ><source src='RHH1A.mp4' type='video/mp4'></video>";
+            break;
+
+          case "R2":
+            v =
+              "<video width=100%' controls id='myvideo' autoplay ><source src='RHH2A.mp4' type='video/mp4'></video>";
+            break;
+
+          case "R3":
+            v =
+              "<video width=100%' controls id='myvideo' autoplay ><source src='RHH3A.mp4' type='video/mp4'></video>";
+            break;
+        }
+
+        //button to go to pitchersheet or for Review answers
+        t = "<div class='w3-quarter w3-large'>";
+
+        if (miniVideoToPlay == "L3" || miniVideoToPlay == "R3") {
+          t +=
+            "<button class='w3-btn w3-teal' id= 'toSubmit' onclick= 'finalScores()'>Review answers</button>";
+          t += "</div>";
+          document.getElementById("title").innerHTML =
+            "Bat at " +
+            headCount +
+            "<br>Watch the video, then tap <b>Review answers</b>";
+        } else {
+          if (pitcher == "L") {
+            t +=
+              "<button class='w3-btn w3-teal' id= 'toSubmit' onclick= 'goToLHHPitcher()'>Show next At-bat</button>";
+          } else if (pitcher == "R") {
+            t +=
+              "<button class='w3-btn w3-teal' id= 'toSubmit' onclick= 'goToRHHPitcher()'>Show next At-bat</button>";
+          }
+          t += "</div>";
+          document.getElementById("title").innerHTML =
+            "Bat at " +
+            headCount +
+            "<br>Watch the video, then tap <b>Show next At-bat</b>";
+        }
+
+        // depending on the pitcher LHH or RHH function is called to go again for the next time
+
+        document.getElementById("main").innerHTML = v;
+        document.getElementById("buttonHolder").innerHTML = t;
+        headCount++;
+      }
+
+      function finalScores() {
+        var answer1 = localStorage.getItem("answer1");
+        var answer2 = localStorage.getItem("answer2");
+        var answer3 = localStorage.getItem("answer3");
+        var r1 =
+          "<i style='color:blue;'>(Your prediction: " +
+          "<b>" +
+          answer1 +
+          " </b> ----> Actual pitch: <b>Fastball</b>)</i>";
+        var r2 =
+          "<i style='color:blue;'>(Your prediction: " +
+          "<b>" +
+          answer2 +
+          " </b> ----> Actual pitch: <b>Fastball</b>)</i>";
+        var r3 =
+          "<i style='color:blue;'>(Your prediction: " +
+          "<b>" +
+          answer3 +
+          " </b> ----> Actual pitch: <b>Fastball</b>)</i>";
+        var a = "<h1><b>Summary of results</b></h1><br>";
+        var q1 = "<h1>At-bat 1:</h1><br>" + r1;
+        var q2 = "<h1>At-bat 2:</h1><br>" + r2;
+        var q3 = "<h1>At-bat 3:</h1><br>" + r3;
+        var z = "<div class='w3-card-3 w3-container w3-center w3-large'>";
+        z +=
+          "<button class='w3-btn w3-teal' id= 'toSubmit' onclick= 'home()'>Home</button>";
+        z += "</div>";
+
+        // display
+        document.getElementById("main").innerHTML = a + q1 + q2 + q3;
+        document.getElementById("title").innerHTML =
+          "Tap <b>Home</b> to start again";
+        document.getElementById("buttonHolder").innerHTML = z;
+
+        //set all back to 0
+
+        localStorage.setItem("answer1", "Not selected ");
+        localStorage.setItem("answer2", "Not selected ");
+        localStorage.setItem("answer3", "Not selected ");
+        q1 = "";
+        q2 = "";
+        q3 = "";
+        answer1 = " ";
+        answer2 = " ";
+        answer3 = " ";
+        headCount = 1;
+        handedness = "";
+        miniVideoToPlay = "";
+        answerTracker = 1;
+      }
+    </script>
+  </body>
+</html>
